@@ -45,6 +45,9 @@ const Navbar = () => {
                         <Link to="/" className="text-white hover:text-yellow-200 px-3 py-2 rounded-md text-base font-semibold transition-colors">
                             Home
                         </Link>
+                        <Link to="/shop" className="text-white hover:text-yellow-200 px-3 py-2 rounded-md text-base font-semibold transition-colors">
+                            Shop
+                        </Link>
 
                         {/* Animated Cart Link */}
                         <div className="relative group">
@@ -113,6 +116,9 @@ const Navbar = () => {
                     <div className="pt-2 pb-3 space-y-1">
                         <Link to="/" onClick={() => setIsOpen(false)} className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-red-100 hover:bg-red-700 hover:border-yellow-400 hover:text-white transition-all">
                             Home
+                        </Link>
+                        <Link to="/shop" onClick={() => setIsOpen(false)} className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-red-100 hover:bg-red-700 hover:border-yellow-400 hover:text-white transition-all">
+                            Shop
                         </Link>
                         <Link to="/cart" onClick={() => setIsOpen(false)} className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-red-100 hover:bg-red-700 hover:border-yellow-400 hover:text-white transition-all flex items-center">
                             Cart

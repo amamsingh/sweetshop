@@ -8,7 +8,7 @@ const USE_MOCK = false;
 const api = {
     // Auth
     login: async (credentials) => {
-        if (USE_MOCK) return mockDB.login(credentials); // You'd need to implement this in mockDB if you wanted full mock auth
+        if (USE_MOCK) return mockDB.login(credentials);
         const response = await client.post('/auth/login', credentials);
         return response.data;
     },

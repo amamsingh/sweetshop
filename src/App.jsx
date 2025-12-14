@@ -5,7 +5,8 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
+import Shop from './pages/Shop';
 import AdminDashboard from './pages/AdminDashboard';
 import Cart from './pages/Cart';
 import PrivateRoute from './routes/PrivateRoute';
@@ -24,8 +25,11 @@ function App() {
 
             {/* Protected Routes with Layout */}
             <Route element={<Layout />}>
+              {/* Home is technically public but wrapped in Layout for Navbar */}
+              <Route path="/" element={<Home />} />
+
               <Route element={<PrivateRoute />}>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/shop" element={<Shop />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/cart" element={<Cart />} />
               </Route>
