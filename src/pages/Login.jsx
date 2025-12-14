@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { ShoppingBag } from 'lucide-react';
 
+import api from '../api';
+
 const Login = () => {
     const [formData, setFormData] = useState({
         email: '',
@@ -23,12 +25,19 @@ const Login = () => {
 
         try {
             if (formData.email && formData.password) {
-                await new Promise(resolve => setTimeout(resolve, 800));
-                const mockToken = 'mock-jwt-token-' + Date.now();
-                const role = formData.email.includes('admin') ? 'admin' : 'user';
-                const mockUser = { name: 'User Name', email: formData.email, role };
+                const data = await api.login(formData);
+                const role = data.isAdmin ? 'admin' : 'user'; // Assuming backend returns isAdmin
+                // Backend login response usually returns: { token, _id, name, email, isAdmin, ... }
 
-                login(mockToken, mockUser);
+                // Map backend response to user object format expected by context
+                const userObj = {
+                    name: data.name,
+                    email: data.email,
+                    role: data.isAdmin ? 'admin' : 'user', // Explicitly map isAdmin to role
+                    id: data._id
+                };
+
+                login(data.token, userObj);
                 toast.success('Welcome back!');
                 navigate('/');
             } else {
@@ -37,7 +46,8 @@ const Login = () => {
 
         } catch (error) {
             console.error(error);
-            toast.error(error.message || 'Login failed.');
+            const message = error.response?.data?.message || 'Login failed.';
+            toast.error(message);
         } finally {
             setLoading(false);
         }
