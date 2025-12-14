@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-red-50 text-gray-900;
+    }
+}
+
+@layer utilities {
+    .text-brand-red {
+        @apply text-red-700;
+    }
+
+    .bg-brand-red {
+        @apply bg-red-700;
+    }
+
+    .text-brand-gold {
+        @apply text-yellow-600;
+    }
+
+    .border-brand-gold {
+        @apply border-yellow-500;
+    }
+}
