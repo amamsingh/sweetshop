@@ -13,7 +13,7 @@ const HighlightedText = ({ text, highlight }) => {
         <span>
             {parts.map((part, i) =>
                 regex.test(part) ? (
-                    <span key={i} className="bg-yellow-200 text-red-900 rounded px-0.5 font-semibold">{part}</span>
+                    <span key={i} className="bg-yellow-200 text-red-900 dark:bg-yellow-600 dark:text-yellow-100 rounded px-0.5 font-semibold">{part}</span>
                 ) : (
                     <span key={i}>{part}</span>
                 )
@@ -36,8 +36,8 @@ const SweetCard = ({ sweet, onPurchase, highlightTerm = '' }) => {
     };
 
     return (
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:border-red-200 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group relative">
-            <div className="h-56 w-full bg-gray-100 relative overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-red-200 dark:hover:border-red-800 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group relative">
+            <div className="h-56 w-full bg-gray-100 dark:bg-gray-700 relative overflow-hidden">
                 <img
                     src={imageUrl || 'https://images.unsplash.com/photo-1579338559194-a162d19bf842?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'}
                     alt={name}
@@ -60,37 +60,37 @@ const SweetCard = ({ sweet, onPurchase, highlightTerm = '' }) => {
             <div className="p-5 flex flex-col flex-grow relative z-10">
                 <div className="flex justify-between items-start mb-2">
                     <div>
-                        <h3 className="text-lg font-bold text-gray-900 line-clamp-1 group-hover:text-red-700 transition-colors duration-300 font-serif" title={name}>
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white line-clamp-1 group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors duration-300 font-serif" title={name}>
                             <HighlightedText text={name} highlight={highlightTerm} />
                         </h3>
                         <div className="flex flex-wrap gap-1 mt-1">
                             {sweet.weight && (
-                                <span className="inline-block bg-red-50 text-red-700 text-xs font-semibold px-2 py-0.5 rounded border border-red-100">
+                                <span className="inline-block bg-red-50 text-red-700 dark:text-red-300 dark:bg-red-900/30 text-xs font-semibold px-2 py-0.5 rounded border border-red-100 dark:border-red-800">
                                     {sweet.weight}
                                 </span>
                             )}
                             {sweet.rating && (
-                                <span className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-0.5 rounded border border-yellow-200">
+                                <span className="inline-flex items-center bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 text-xs font-semibold px-2 py-0.5 rounded border border-yellow-200 dark:border-yellow-800">
                                     ★ {sweet.rating}
                                 </span>
                             )}
                         </div>
                     </div>
-                    <span className="text-lg font-bold text-red-700 bg-red-50 px-3 py-1 rounded-full">₹{price}</span>
+                    <span className="text-lg font-bold text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/30 px-3 py-1 rounded-full">₹{price}</span>
                 </div>
 
-                <p className="text-sm text-gray-500 mb-2 line-clamp-2 leading-relaxed">{description || 'Delicious sweet treat.'}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-300 mb-2 line-clamp-2 leading-relaxed">{description || 'Delicious sweet treat.'}</p>
 
                 {sweet.ingredients && (
-                    <p className="text-xs text-gray-400 mb-4 italic">
-                        <span className="font-semibold not-italic text-gray-500">Contains:</span> {sweet.ingredients}
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-4 italic">
+                        <span className="font-semibold not-italic text-gray-500 dark:text-gray-400">Contains:</span> {sweet.ingredients}
                     </p>
                 )}
 
                 <div className="mt-auto space-y-4">
-                    <div className="flex justify-between items-center text-sm border-t border-gray-100 pt-3">
-                        <span className="text-gray-500 font-medium">Quantity</span>
-                        <span className={`font-bold px-2.5 py-1 rounded-full text-xs ${isOutOfStock ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                    <div className="flex justify-between items-center text-sm border-t border-gray-100 dark:border-gray-700 pt-3">
+                        <span className="text-gray-500 dark:text-gray-400 font-medium">Quantity</span>
+                        <span className={`font-bold px-2.5 py-1 rounded-full text-xs ${isOutOfStock ? 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300' : 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300'}`}>
                             {isOutOfStock ? 'Unavailable' : `${quantity} Left`}
                         </span>
                     </div>
@@ -100,8 +100,8 @@ const SweetCard = ({ sweet, onPurchase, highlightTerm = '' }) => {
                         disabled={isOutOfStock || isPurchasing}
                         className={`w-full flex items-center justify-center py-3 px-4 rounded-lg shadow-sm text-sm font-bold text-white transition-all duration-200 relative overflow-hidden
               ${isOutOfStock
-                                ? 'bg-gray-300 cursor-not-allowed opacity-70 grayscale text-gray-500'
-                                : 'bg-red-700 hover:bg-red-800 active:scale-[0.98] shadow-red-700/20 hover:shadow-red-700/40'
+                                ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed opacity-70 grayscale text-gray-500 dark:text-gray-400'
+                                : 'bg-red-700 dark:bg-red-600 hover:bg-red-800 dark:hover:bg-red-700 active:scale-[0.98] shadow-red-700/20 hover:shadow-red-700/40'
                             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-red-600`}
                     >
                         {isPurchasing ? (

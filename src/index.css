@@ -4,11 +4,20 @@
 
 @layer base {
     body {
-        @apply bg-amber-50 text-gray-900;
+        @apply bg-amber-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100;
         background-image: url('/images/sweet_pattern.png');
         background-size: 300px;
         background-repeat: repeat;
         background-blend-mode: soft-light;
+        @apply transition-colors duration-300;
+    }
+}
+
+@layer base {
+    .dark body {
+        background-blend-mode: overlay;
+        background-color: #1a0b0b;
+        /* Very dark brownish red to match sweet theme */
     }
 }
 
