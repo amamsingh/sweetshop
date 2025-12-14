@@ -33,7 +33,7 @@ const Login = () => {
                 const userObj = {
                     name: data.name,
                     email: data.email,
-                    role: data.isAdmin ? 'admin' : 'user', // Explicitly map isAdmin to role
+                    role: data.role, // Use role directly from backend
                     id: data._id
                 };
 

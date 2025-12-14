@@ -17,7 +17,7 @@ router.route('/').get(getSweets).post(
     admin,
     [
         check('name', 'Name is required').not().isEmpty(),
-        check('category', 'Category is required').not().isEmpty(),
+        // Category made optional as frontend doesn't send it currently
         check('price', 'Price is required and should be a number').isNumeric(),
         check('quantity', 'Quantity is required and should be a number').isNumeric(),
     ],

@@ -49,14 +49,20 @@ const createSweet = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, category, price, quantity } = req.body;
+    const { name, category, price, quantity, description, imageUrl, weight, ingredients, rating, tags } = req.body;
 
     try {
         const sweet = new Sweet({
             name,
-            category,
+            category: category || 'General',
             price,
             quantity,
+            description,
+            imageUrl,
+            weight,
+            ingredients,
+            rating,
+            tags,
         });
 
         const createSweet = await sweet.save();
@@ -70,7 +76,7 @@ const createSweet = async (req, res) => {
 // @route   PUT /api/sweets/:id
 // @access  Private/Admin
 const updateSweet = async (req, res) => {
-    const { name, category, price, quantity } = req.body;
+    const { name, category, price, quantity, description, imageUrl, weight, ingredients, rating, tags } = req.body;
 
     try {
         const sweet = await Sweet.findById(req.params.id);
@@ -80,6 +86,12 @@ const updateSweet = async (req, res) => {
             sweet.category = category || sweet.category;
             sweet.price = price || sweet.price;
             sweet.quantity = quantity !== undefined ? quantity : sweet.quantity;
+            sweet.description = description || sweet.description;
+            sweet.imageUrl = imageUrl || sweet.imageUrl;
+            sweet.weight = weight || sweet.weight;
+            sweet.ingredients = ingredients || sweet.ingredients;
+            sweet.rating = rating !== undefined ? rating : sweet.rating;
+            sweet.tags = tags || sweet.tags;
 
             const updatedSweet = await sweet.save();
             res.json(updatedSweet);

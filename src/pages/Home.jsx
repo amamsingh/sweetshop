@@ -1,9 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Testimonials from '../components/Testimonials';
-import { ArrowRight, Star } from 'lucide-react';
+import SweetCard from '../components/SweetCard';
+import { useCart } from '../context/CartContext';
+import api from '../api';
+import { ArrowRight, Star, Sparkles } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Home = () => {
+    const [featuredSweets, setFeaturedSweets] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const { addToCart } = useCart();
+
+    useEffect(() => {
+        const fetchFeatured = async () => {
+            try {
+                const sweets = await api.getSweets();
+                // Filter for sweets that have 'Featured' tag (case insensitive)
+                const featured = sweets.filter(s =>
+                    s.tags && s.tags.some(tag => tag.toLowerCase() === 'featured')
+                ).slice(0, 4); // Limit to 4 items
+
+                // Fallback: If no featured items, show top rated or first 4
+                if (featured.length === 0) {
+                    setFeaturedSweets(sweets.slice(0, 4));
+                } else {
+                    setFeaturedSweets(featured);
+                }
+            } catch (error) {
+                console.error('Failed to fetch sweets', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchFeatured();
+    }, []);
+
+    const handlePurchase = async (id) => {
+        try {
+            const sweet = featuredSweets.find(s => s._id === id || s.id === id);
+            if (!sweet || sweet.quantity <= 0) return;
+
+            addToCart(sweet);
+            // Optimistic update
+            setFeaturedSweets(prev => prev.map(s =>
+                (s._id === id || s.id === id) ? { ...s, quantity: s.quantity - 1 } : s
+            ));
+
+            await api.purchaseSweet(id);
+            toast.success(`Added ${sweet.name} to Cart!`);
+        } catch (error) {
+            console.error(error);
+            toast.error('Could not add to cart');
+        }
+    };
+
     return (
         <div className="space-y-16 animate-in fade-in duration-500 pb-12">
 
@@ -39,6 +90,36 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Featured Sweets Section */}
+            {!loading && featuredSweets.length > 0 && (
+                <div className="px-4 lg:px-0">
+                    <div className="text-center mb-10">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full bg-red-100 text-red-800 text-sm font-medium mb-4">
+                            <Sparkles className="w-4 h-4 mr-2" />
+                            Handpicked Favorites
+                        </span>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-serif mb-3">Featured Delights</h2>
+                        <p className="text-gray-600 dark:text-gray-400">Our most loved sweets, chosen just for you.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {featuredSweets.map((sweet) => (
+                            <SweetCard
+                                key={sweet.id || sweet._id}
+                                sweet={sweet}
+                                onPurchase={handlePurchase}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="mt-10 text-center">
+                        <Link to="/shop" className="inline-flex items-center font-semibold text-red-700 hover:text-red-800 transition-colors">
+                            View All Sweets <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                    </div>
+                </div>
+            )}
 
             {/* Features / USPs */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 lg:px-0">

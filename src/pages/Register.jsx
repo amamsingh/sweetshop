@@ -24,11 +24,15 @@ const Register = () => {
 
         try {
             if (formData.name && formData.email && formData.password) {
-                await new Promise(resolve => setTimeout(resolve, 800));
-                const mockToken = 'mock-jwt-token-' + Date.now();
-                const mockUser = { name: formData.name, email: formData.email, role: 'user' };
+                const data = await api.register(formData);
+                const userObj = {
+                    name: data.name,
+                    email: data.email,
+                    role: data.role,
+                    id: data._id
+                };
 
-                login(mockToken, mockUser);
+                login(data.token, userObj);
                 toast.success('Registration successful!');
                 navigate('/');
             } else {
@@ -37,7 +41,8 @@ const Register = () => {
 
         } catch (error) {
             console.error(error);
-            toast.error(error.message || 'Registration failed.');
+            const message = error.response?.data?.message || 'Registration failed.';
+            toast.error(message);
         } finally {
             setLoading(false);
         }

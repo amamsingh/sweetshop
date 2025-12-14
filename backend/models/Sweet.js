@@ -8,7 +8,8 @@ const sweetSchema = mongoose.Schema(
         },
         category: {
             type: String,
-            required: true,
+            required: false,
+            default: 'General',
         },
         price: {
             type: Number,
@@ -19,6 +20,32 @@ const sweetSchema = mongoose.Schema(
             type: Number,
             required: true,
             default: 0,
+        },
+        weight: {
+            type: String,
+            required: false,
+        },
+        rating: {
+            type: Number,
+            required: false,
+            default: 0,
+        },
+        ingredients: {
+            type: String,
+            required: false,
+        },
+        description: {
+            type: String,
+            required: false,
+        },
+        imageUrl: {
+            type: String,
+            required: false,
+        },
+        tags: {
+            type: [String],
+            required: false,
+            default: [],
         },
     },
     {
