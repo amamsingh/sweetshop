@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
@@ -15,13 +16,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get('/', (req, res) => {
-    res.send('API is running...');
-});
+
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/sweets', sweetRoutes);
+
+// Serve static files from the dist folder
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../', 'dist', 'index.html'));
+});
 
 // Error Handling
 app.use(notFound);
