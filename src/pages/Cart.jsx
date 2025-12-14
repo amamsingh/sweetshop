@@ -3,6 +3,7 @@ import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, ChevronLeft, Trash2, CheckCircle, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import confetti from 'canvas-confetti';
 
 const Cart = () => {
     const { cart, removeFromCart, totalPrice, clearCart } = useCart();
@@ -24,6 +25,15 @@ const Cart = () => {
                 color: '#fff',
             },
         });
+
+        // Fire confetti
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#ef4444', '#eab308', '#ffffff'] // Red, Gold, White
+        });
+
         setIsCheckingOut(false);
         navigate('/');
     };

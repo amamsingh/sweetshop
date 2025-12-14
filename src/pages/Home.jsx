@@ -13,12 +13,12 @@ const Home = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
 
                 <div className="relative z-10 px-8 py-20 md:py-32 md:px-16 flex flex-col justify-center h-full text-white">
-                    <span className="inline-block py-1 px-3 rounded-full bg-yellow-500/20 border border-yellow-400/30 text-yellow-300 text-sm font-semibold mb-6 w-max backdrop-blur-sm">
+                    <span className="inline-block py-1 px-3 rounded-full bg-yellow-500/20 border border-yellow-400/30 text-yellow-300 text-sm font-semibold mb-6 w-max backdrop-blur-sm animate-bounce duration-[2000ms]">
                         Since 1985
                     </span>
-                    <h1 className="text-5xl md:text-7xl font-extrabold font-serif leading-tight mb-6">
+                    <h1 className="text-5xl md:text-7xl font-extrabold font-serif leading-tight mb-6 drop-shadow-lg">
                         Experience the <br />
-                        <span className="text-yellow-400">Sweetness</span> of Tradition
+                        <span className="text-yellow-400 bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-yellow-500">Sweetness</span> of Tradition
                     </h1>
                     <p className="text-lg md:text-xl text-gray-200 max-w-xl mb-10 leading-relaxed">
                         Handcrafted with pure Desi Ghee and love. We bring you the authentic taste of India, delivered fresh to your doorstep.
@@ -42,41 +42,41 @@ const Home = () => {
 
             {/* Features / USPs */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 lg:px-0">
-                <div className="bg-white p-8 rounded-2xl shadow-sm border border-red-100 hover:shadow-md transition-shadow text-center group">
-                    <div className="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-red-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center group">
+                    <div className="bg-red-50 dark:bg-red-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:bg-red-100 dark:group-hover:bg-red-900/50 transition-all duration-300">
                         <span className="text-3xl">🍯</span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 font-serif">Pure Ingredients</h3>
-                    <p className="text-gray-500">Made with 100% pure ghee and premium quality dry fruits.</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 font-serif">Pure Ingredients</h3>
+                    <p className="text-gray-500 dark:text-gray-400">Made with 100% pure ghee and premium quality dry fruits.</p>
                 </div>
-                <div className="bg-white p-8 rounded-2xl shadow-sm border border-red-100 hover:shadow-md transition-shadow text-center group">
-                    <div className="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-red-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center group">
+                    <div className="bg-red-50 dark:bg-red-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:bg-red-100 dark:group-hover:bg-red-900/50 transition-all duration-300">
                         <span className="text-3xl">👨‍🍳</span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 font-serif">Handcrafted</h3>
-                    <p className="text-gray-500">Traditional recipes passed down through generations.</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 font-serif">Handcrafted</h3>
+                    <p className="text-gray-500 dark:text-gray-400">Traditional recipes passed down through generations.</p>
                 </div>
-                <div className="bg-white p-8 rounded-2xl shadow-sm border border-red-100 hover:shadow-md transition-shadow text-center group">
-                    <div className="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-red-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center group">
+                    <div className="bg-red-50 dark:bg-red-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:bg-red-100 dark:group-hover:bg-red-900/50 transition-all duration-300">
                         <span className="text-3xl">🚀</span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 font-serif">Fast Delivery</h3>
-                    <p className="text-gray-500">Fresh sweets delivered to your doorstep in record time.</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 font-serif">Fast Delivery</h3>
+                    <p className="text-gray-500 dark:text-gray-400">Fresh sweets delivered to your doorstep in record time.</p>
                 </div>
             </div>
 
             {/* Testimonials */}
-            <div className="bg-red-50 py-12 rounded-3xl mx-4 lg:mx-0">
+            <div className="bg-red-50 dark:bg-gray-900 py-12 rounded-3xl mx-4 lg:mx-0 transition-colors duration-300">
                 <div className="text-center mb-10">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-serif mb-3">Customer Love</h2>
-                    <p className="text-gray-600">What our sweet lovers have to say</p>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-serif mb-3">Customer Love</h2>
+                    <p className="text-gray-600 dark:text-gray-400">What our sweet lovers have to say</p>
                 </div>
                 <Testimonials />
             </div>
 
             {/* CTA */}
             <div className="text-center py-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6 font-serif">Ready to indulge?</h2>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 font-serif">Ready to indulge?</h2>
                 <Link
                     to="/shop"
                     className="inline-flex items-center px-8 py-3 bg-red-700 text-white rounded-xl font-bold text-lg hover:bg-red-800 transition-colors shadow-lg hover:shadow-xl"
