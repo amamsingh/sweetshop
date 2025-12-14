@@ -31,12 +31,12 @@ const Navbar = () => {
                 <div className="flex justify-between h-20">
                     <div className="flex">
                         <Link to="/" className="flex-shrink-0 flex items-center group">
-                            <div className="bg-white p-2 rounded-full shadow-md">
-                                <ShoppingBag className="h-8 w-8 text-red-700" />
+                            <div className="bg-white p-1 rounded-full shadow-md">
+                                <img src="/images/madhuram_logo.png" alt="Madhuram Sweets Logo" className="h-10 w-10 object-contain rounded-full" />
                             </div>
                             <div className="ml-3 flex flex-col">
-                                <span className="text-2xl font-bold text-white tracking-wide font-serif">Chandigarh Sweets</span>
-                                <span className="text-xs text-yellow-300 font-medium tracking-widest uppercase">Traditional Taste</span>
+                                <span className="text-2xl font-bold text-white tracking-wide font-serif">Madhuram Sweets</span>
+                                <span className="text-xs text-yellow-300 font-medium tracking-widest uppercase">Pure & Delicious</span>
                             </div>
                         </Link>
                     </div>
@@ -145,15 +145,6 @@ const Navbar = () => {
                     </div>
                 </div>
             )}
-            {/* Festive Hanging Decorations */}
-            <div className="absolute top-full left-0 w-full overflow-hidden pointer-events-none flex justify-around -mt-1 z-10">
-                <img src="/images/marigold_garland.png" alt="" className="h-48 w-auto opacity-90 drop-shadow-md animate-sway origin-top" style={{ animationDelay: '0s' }} />
-                <img src="/images/marigold_garland.png" alt="" className="h-64 w-auto opacity-90 drop-shadow-md animate-sway origin-top hidden sm:block" style={{ animationDelay: '1s' }} />
-                <img src="/images/marigold_garland.png" alt="" className="h-40 w-auto opacity-90 drop-shadow-md animate-sway origin-top hidden md:block" style={{ animationDelay: '0.5s' }} />
-                <img src="/images/marigold_garland.png" alt="" className="h-56 w-auto opacity-90 drop-shadow-md animate-sway origin-top" style={{ animationDelay: '1.5s' }} />
-                <img src="/images/marigold_garland.png" alt="" className="h-44 w-auto opacity-90 drop-shadow-md animate-sway origin-top hidden lg:block" style={{ animationDelay: '0.2s' }} />
-                <img src="/images/marigold_garland.png" alt="" className="h-60 w-auto opacity-90 drop-shadow-md animate-sway origin-top hidden xl:block" style={{ animationDelay: '1.2s' }} />
-            </div>
         </nav>
     );
 };

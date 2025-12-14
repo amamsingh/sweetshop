@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { mockDB } from '../api/mockDB';
 import SweetCard from '../components/SweetCard';
 import SkeletonCard from '../components/SkeletonCard';
+import Testimonials from '../components/Testimonials';
 import useDebounce from '../hooks/useDebounce';
 import { useCart } from '../context/CartContext';
 import { Search, Filter, ShoppingBag } from 'lucide-react';
@@ -122,8 +123,8 @@ const Dashboard = () => {
                     <button
                         onClick={() => setShowInStockOnly(!showInStockOnly)}
                         className={`flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 border ${showInStockOnly
-                                ? 'bg-red-600 border-red-600 text-white shadow-lg'
-                                : 'bg-white border-gray-300 text-gray-700 hover:border-red-300 hover:bg-red-50'
+                            ? 'bg-red-600 border-red-600 text-white shadow-lg'
+                            : 'bg-white border-gray-300 text-gray-700 hover:border-red-300 hover:bg-red-50'
                             }`}
                     >
                         <Filter className={`h-4 w-4 mr-2 transition-transform ${showInStockOnly ? 'rotate-180' : ''}`} />
@@ -164,6 +165,8 @@ const Dashboard = () => {
                     </div>
                 )}
             </div>
+            {/* Testimonials Section */}
+            <Testimonials />
         </div>
     );
 };

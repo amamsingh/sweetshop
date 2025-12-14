@@ -4,7 +4,11 @@
 
 @layer base {
     body {
-        @apply bg-red-50 text-gray-900;
+        @apply bg-amber-50 text-gray-900;
+        background-image: url('/images/sweet_pattern.png');
+        background-size: 300px;
+        background-repeat: repeat;
+        background-blend-mode: soft-light;
     }
 }
 

@@ -48,17 +48,44 @@ const SweetCard = ({ sweet, onPurchase, highlightTerm = '' }) => {
                         <span className="text-red-700 font-bold text-lg px-6 py-2 border-4 border-red-700 rounded-lg uppercase tracking-wider bg-white shadow-xl transform -rotate-12">Sold Out</span>
                     </div>
                 )}
+                <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
+                    {sweet.tags && sweet.tags.map((tag, index) => (
+                        <span key={index} className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow-md uppercase tracking-wider">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
             </div>
 
             <div className="p-5 flex flex-col flex-grow relative z-10">
                 <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-bold text-gray-900 line-clamp-1 group-hover:text-red-700 transition-colors duration-300 font-serif" title={name}>
-                        <HighlightedText text={name} highlight={highlightTerm} />
-                    </h3>
-                    <span className="text-lg font-bold text-red-700 bg-red-50 px-3 py-1 rounded-full">${price}</span>
+                    <div>
+                        <h3 className="text-lg font-bold text-gray-900 line-clamp-1 group-hover:text-red-700 transition-colors duration-300 font-serif" title={name}>
+                            <HighlightedText text={name} highlight={highlightTerm} />
+                        </h3>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                            {sweet.weight && (
+                                <span className="inline-block bg-red-50 text-red-700 text-xs font-semibold px-2 py-0.5 rounded border border-red-100">
+                                    {sweet.weight}
+                                </span>
+                            )}
+                            {sweet.rating && (
+                                <span className="inline-flex items-center bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-0.5 rounded border border-yellow-200">
+                                    ★ {sweet.rating}
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                    <span className="text-lg font-bold text-red-700 bg-red-50 px-3 py-1 rounded-full">₹{price}</span>
                 </div>
 
-                <p className="text-sm text-gray-500 mb-4 line-clamp-2 flex-grow leading-relaxed">{description || 'Delicious sweet treat.'}</p>
+                <p className="text-sm text-gray-500 mb-2 line-clamp-2 leading-relaxed">{description || 'Delicious sweet treat.'}</p>
+
+                {sweet.ingredients && (
+                    <p className="text-xs text-gray-400 mb-4 italic">
+                        <span className="font-semibold not-italic text-gray-500">Contains:</span> {sweet.ingredients}
+                    </p>
+                )}
 
                 <div className="mt-auto space-y-4">
                     <div className="flex justify-between items-center text-sm border-t border-gray-100 pt-3">

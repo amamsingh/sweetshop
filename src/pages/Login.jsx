@@ -26,7 +26,7 @@ const Login = () => {
                 await new Promise(resolve => setTimeout(resolve, 800));
                 const mockToken = 'mock-jwt-token-' + Date.now();
                 const role = formData.email.includes('admin') ? 'admin' : 'user';
-                const mockUser = { name: 'Test User', email: formData.email, role };
+                const mockUser = { name: 'User Name', email: formData.email, role };
 
                 login(mockToken, mockUser);
                 toast.success('Welcome back!');

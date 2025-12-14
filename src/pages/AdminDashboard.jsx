@@ -110,7 +110,7 @@ const AdminDashboard = () => {
                                         <div className="ml-4 truncate">
                                             <div className="text-lg font-medium text-gray-900 truncate font-serif">{sweet.name}</div>
                                             <div className="flex items-center text-sm text-gray-500">
-                                                <span className="truncate">Price: ${sweet.price}</span>
+                                                <span className="truncate">Price: ₹{sweet.price}</span>
                                                 <span className="mx-2 text-gray-400">•</span>
                                                 <span className={`${sweet.quantity === 0 ? 'text-red-600 font-bold' : ''}`}>
                                                     Stock: {sweet.quantity}

@@ -6,6 +6,7 @@ const SweetFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
         name: '',
         price: '',
         quantity: '',
+        weight: '',
         description: '',
         imageUrl: ''
     });
@@ -16,16 +17,20 @@ const SweetFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                 name: initialData.name,
                 price: initialData.price,
                 quantity: initialData.quantity,
+                weight: initialData.weight || '',
                 description: initialData.description || '',
-                imageUrl: initialData.imageUrl || ''
+                imageUrl: initialData.imageUrl || '',
+                tags: initialData.tags ? initialData.tags.join(', ') : ''
             });
         } else {
             setFormData({
                 name: '',
                 price: '',
                 quantity: '',
+                weight: '',
                 description: '',
-                imageUrl: ''
+                imageUrl: '',
+                tags: ''
             });
         }
     }, [initialData, isOpen]);
@@ -37,7 +42,8 @@ const SweetFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
         onSubmit({
             ...formData,
             price: parseFloat(formData.price),
-            quantity: parseInt(formData.quantity)
+            quantity: parseInt(formData.quantity),
+            tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
         });
     };
 
@@ -76,9 +82,9 @@ const SweetFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-3 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700">Price ($)</label>
+                                        <label className="block text-sm font-medium text-gray-700">Price (₹)</label>
                                         <input
                                             type="number"
                                             step="0.01"
@@ -96,6 +102,16 @@ const SweetFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white text-gray-900 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-400"
                                             value={formData.quantity}
                                             onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Weight</label>
+                                        <input
+                                            type="text"
+                                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white text-gray-900 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-400"
+                                            placeholder="e.g. 1kg"
+                                            value={formData.weight}
+                                            onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
                                         />
                                     </div>
                                 </div>
@@ -117,6 +133,17 @@ const SweetFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                                         value={formData.description}
                                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                     />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Tags (comma separated)</label>
+                                    <input
+                                        type="text"
+                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white text-gray-900 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm placeholder-gray-400"
+                                        placeholder="e.g. Bestseller, Spicy"
+                                        value={formData.tags}
+                                        onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                                    />
+                                    <p className="mt-1 text-xs text-gray-400">Comma separated, e.g. "Bestseller, Spicy"</p>
                                 </div>
                             </div>
                         </form>

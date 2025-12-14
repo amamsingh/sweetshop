@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { Link } from 'react-router-dom';
-import { ShoppingBag, ChevronLeft, Trash2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ShoppingBag, ChevronLeft, Trash2, CheckCircle, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Cart = () => {
     const { cart, removeFromCart, totalPrice, clearCart } = useCart();
+    const [isCheckingOut, setIsCheckingOut] = useState(false);
+    const navigate = useNavigate();
+
+    const handleCheckout = async () => {
+        setIsCheckingOut(true);
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        clearCart();
+        toast.success('Order placed successfully! Thank you for choosing Madhuram Sweets.', {
+            duration: 5000,
+            icon: '🎉',
+            style: {
+                borderRadius: '10px',
+                background: '#333',
+                color: '#fff',
+            },
+        });
+        setIsCheckingOut(false);
+        navigate('/');
+    };
 
     if (cart.length === 0) {
         return (
@@ -39,7 +61,7 @@ const Cart = () => {
                                     <div className="ml-6 flex-1">
                                         <div className="flex justify-between">
                                             <h3 className="text-lg font-bold text-gray-900 font-serif">{item.name}</h3>
-                                            <p className="text-lg font-bold text-red-600">${(item.price * item.quantity).toFixed(2)}</p>
+                                            <p className="text-lg font-bold text-red-600">₹{(item.price * item.quantity).toFixed(2)}</p>
                                         </div>
                                         <p className="mt-1 text-sm text-gray-500">{item.description}</p>
                                         <div className="mt-4 flex items-center justify-between">
@@ -73,20 +95,31 @@ const Cart = () => {
                             <dl className="-my-4 divide-y divide-gray-100">
                                 <div className="py-4 flex items-center justify-between">
                                     <dt className="text-gray-600">Subtotal</dt>
-                                    <dd className="font-medium text-gray-900">${totalPrice.toFixed(2)}</dd>
+                                    <dd className="font-medium text-gray-900">₹{totalPrice.toFixed(2)}</dd>
                                 </div>
                                 <div className="py-4 flex items-center justify-between">
                                     <dt className="text-gray-600">Tax</dt>
-                                    <dd className="font-medium text-gray-900">$0.00</dd>
+                                    <dd className="font-medium text-gray-900">₹0.00</dd>
                                 </div>
                                 <div className="py-4 flex items-center justify-between border-t border-gray-200">
                                     <dt className="text-lg font-bold text-gray-900">Total</dt>
-                                    <dd className="text-xl font-bold text-red-600">${totalPrice.toFixed(2)}</dd>
+                                    <dd className="text-xl font-bold text-red-600">₹{totalPrice.toFixed(2)}</dd>
                                 </div>
                             </dl>
                         </div>
-                        <button className="mt-8 w-full bg-red-600 text-white rounded-xl py-4 font-bold text-lg shadow-lg shadow-red-600/30 hover:bg-red-700 transition-all transform hover:-translate-y-1">
-                            Checkout
+                        <button
+                            onClick={handleCheckout}
+                            disabled={isCheckingOut}
+                            className="mt-8 w-full bg-red-600 text-white rounded-xl py-4 font-bold text-lg shadow-lg shadow-red-600/30 hover:bg-red-700 transition-all transform hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+                        >
+                            {isCheckingOut ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                                    Processing...
+                                </>
+                            ) : (
+                                'Place Order'
+                            )}
                         </button>
                     </div>
                 </div>

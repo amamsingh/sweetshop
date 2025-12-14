@@ -13,7 +13,15 @@ export const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem('user'); // Optional: store user info too
         if (storedToken) {
             setToken(storedToken);
-            if (storedUser) setUser(JSON.parse(storedUser));
+            if (storedUser) {
+                const parsedUser = JSON.parse(storedUser);
+                // Auto-fix for "Test User" to "User Name" migration
+                if (parsedUser.name === 'Test User') {
+                    parsedUser.name = 'User Name';
+                    localStorage.setItem('user', JSON.stringify(parsedUser));
+                }
+                setUser(parsedUser);
+            }
         }
         setLoading(false);
     }, []);
