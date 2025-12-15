@@ -28,6 +28,10 @@ const api = {
         const response = await client.delete(`/sweets/${id}`);
         return response.data;
     },
+    purchaseSweet: async (id) => {
+        const response = await client.post(`/sweets/${id}/purchase`);
+        return response.data;
+    },
     restockSweet: async (id, quantity) => {
         const response = await client.post(`/sweets/${id}/restock`, { quantity });
         return response.data;
