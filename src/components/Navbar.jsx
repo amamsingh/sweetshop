@@ -14,6 +14,7 @@ const Navbar = () => {
     // Trigger animation when totalItems changes
     useEffect(() => {
         if (totalItems > 0) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setAnimateCart(true);
             const timer = setTimeout(() => setAnimateCart(false), 300); // 300ms bounce
             return () => clearTimeout(timer);

@@ -64,7 +64,7 @@ const Dashboard = () => {
             // NOTE: Usually stock is reduced on checkout, but matching previous logic:
             // The existing backend has `purchaseSweet` which decrements quantity.
             // We'll assume for this simple app, adding to cart reserves it.
-            await api.purchaseSweet(id).catch(err => {
+            await api.purchaseSweet(id).catch(() => {
                 console.warn("Backend purchase/decrement failed, rolling back UI");
                 // Rollback logic could go here
             });

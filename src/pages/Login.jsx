@@ -26,7 +26,6 @@ const Login = () => {
         try {
             if (formData.email && formData.password) {
                 const data = await api.login(formData);
-                const role = data.isAdmin ? 'admin' : 'user'; // Assuming backend returns isAdmin
                 // Backend login response usually returns: { token, _id, name, email, isAdmin, ... }
 
                 // Map backend response to user object format expected by context

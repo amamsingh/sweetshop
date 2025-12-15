@@ -13,6 +13,7 @@ const SweetFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
     useEffect(() => {
         if (initialData) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFormData({
                 name: initialData.name,
                 price: initialData.price,

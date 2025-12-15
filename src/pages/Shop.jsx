@@ -12,77 +12,48 @@ const Shop = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [showInStockOnly, setShowInStockOnly] = useState(false);
+    const [sortOrder, setSortOrder] = useState('recommended');
 
     const { addToCart } = useCart();
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-    const fetchSweets = async () => {
-        setLoading(true);
-        try {
-            const data = await api.getSweets();
-            setSweets(data);
-        } catch (error) {
-            console.error(error);
-            toast.error('Failed to fetch sweets');
-        } finally {
-            setTimeout(() => setLoading(false), 500);
-        }
-    };
-
     useEffect(() => {
+        const fetchSweets = async () => {
+            try {
+                const { data } = await api.get('/sweets');
+                setSweets(data);
+            } catch (error) {
+                console.error('Failed to fetch sweets:', error);
+                toast.error('Could not load sweets.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchSweets();
     }, []);
 
-    const handlePurchase = async (id) => {
-        try {
-            // Find sweet by either _id or id
-            const sweetToUpdate = sweets.find(s => (s._id === id || s.id === id));
-            if (!sweetToUpdate || sweetToUpdate.quantity <= 0) return;
-
-            // Add to global cart context
-            addToCart(sweetToUpdate);
-
-            // Optimistic UI update: Decrement stock locally
-            const newQuantity = sweetToUpdate.quantity - 1;
-            setSweets(prevSweets =>
-                prevSweets.map(sweet =>
-                    (sweet._id === id || sweet.id === id) ? { ...sweet, quantity: newQuantity } : sweet
-                )
-            );
-
-            await api.purchaseSweet(id).catch(err => {
-                console.warn("Backend purchase/decrement failed, rolling back UI");
-            });
-
-            toast.success(`Added ${sweetToUpdate.name} to Cart!`, {
-                icon: '🛒',
-                style: {
-                    borderRadius: '10px',
-                    background: '#b91c1c', // brand red
-                    color: '#fff',
-                },
-            });
-
-        } catch (error) {
-            console.error(error);
-            toast.error('Could not add to cart.', {
-                style: {
-                    borderRadius: '10px',
-                    background: '#b91c1c',
-                    color: '#fff',
-                },
-            });
-            fetchSweets(); // Re-fetch to sync state
-        }
+    const handlePurchase = (sweet) => {
+        addToCart(sweet);
+        toast.success(`${sweet.name} added to cart!`);
     };
 
     const filteredSweets = useMemo(() => {
-        return sweets.filter(sweet => {
+        let result = sweets.filter(sweet => {
             const matchesSearch = sweet.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
             const matchesStock = showInStockOnly ? sweet.quantity > 0 : true;
             return matchesSearch && matchesStock;
         });
-    }, [sweets, debouncedSearchTerm, showInStockOnly]);
+
+        if (sortOrder === 'price-low-high') {
+            result.sort((a, b) => a.price - b.price);
+        } else if (sortOrder === 'price-high-low') {
+            result.sort((a, b) => b.price - a.price);
+        }
+        // 'recommended' keeps original order
+
+        return result;
+    }, [sweets, debouncedSearchTerm, showInStockOnly, sortOrder]);
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500 min-h-screen">
@@ -107,16 +78,28 @@ const Shop = () => {
                         />
                     </div>
 
-                    <button
-                        onClick={() => setShowInStockOnly(!showInStockOnly)}
-                        className={`flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 border ${showInStockOnly
-                            ? 'bg-red-600 border-red-600 text-white shadow-lg'
-                            : 'bg-white border-gray-300 text-gray-700 hover:border-red-300 hover:bg-red-50'
-                            }`}
-                    >
-                        <Filter className={`h-4 w-4 mr-2 transition-transform ${showInStockOnly ? 'rotate-180' : ''}`} />
-                        {showInStockOnly ? 'Show All' : 'In Stock Only'}
-                    </button>
+                    <div className="flex gap-2">
+                        <select
+                            value={sortOrder}
+                            onChange={(e) => setSortOrder(e.target.value)}
+                            className="px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-500 shadow-sm cursor-pointer"
+                        >
+                            <option value="recommended">Recommended</option>
+                            <option value="price-low-high">Price: Low to High</option>
+                            <option value="price-high-low">Price: High to Low</option>
+                        </select>
+
+                        <button
+                            onClick={() => setShowInStockOnly(!showInStockOnly)}
+                            className={`flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 border whitespace-nowrap ${showInStockOnly
+                                ? 'bg-red-600 border-red-600 text-white shadow-lg'
+                                : 'bg-white border-gray-300 text-gray-700 hover:border-red-300 hover:bg-red-50'
+                                }`}
+                        >
+                            <Filter className={`h-4 w-4 mr-2 transition-transform ${showInStockOnly ? 'rotate-180' : ''}`} />
+                            {showInStockOnly ? 'In Stock' : 'Show All'}
+                        </button>
+                    </div>
                 </div>
             </div>
 
