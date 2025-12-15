@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { ShoppingBag } from 'lucide-react';
+import api from '../api';
 
 const Register = () => {
     const [formData, setFormData] = useState({

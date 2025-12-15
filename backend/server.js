@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const authRoutes = require('./routes/authRoutes');
 const sweetRoutes = require('./routes/sweetRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 dotenv.config();
 
@@ -18,9 +19,13 @@ app.use(cors());
 
 
 
+// Health Check
+app.get('/api/health', (req, res) => res.send('OK'));
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/sweets', sweetRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Serve static files from the dist folder
 app.use(express.static(path.join(__dirname, '../dist')));

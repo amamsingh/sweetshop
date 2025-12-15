@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { Menu, X, ShoppingBag, User, LogOut, ShoppingCart, Sun, Moon } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { Menu, X, ShoppingBag, User, LogOut, ShoppingCart } from 'lucide-react';
 
 const Navbar = () => {
     const { user, logout, isAuthenticated } = useAuth();
     const { totalItems } = useCart();
-    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [animateCart, setAnimateCart] = useState(false);
@@ -28,7 +26,7 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-red-700 dark:bg-red-900 shadow-lg sticky top-0 z-50 border-b-4 border-yellow-500 dark:border-yellow-600 transition-colors duration-300">
+        <nav className="bg-red-700 shadow-lg sticky top-0 z-50 border-b-4 border-yellow-500 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-20">
                     <div className="flex">
@@ -43,10 +41,8 @@ const Navbar = () => {
                         </Link>
                     </div>
 
-                    <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
-                        <Link to="/" className="text-white hover:text-yellow-200 px-3 py-2 rounded-md text-base font-semibold transition-colors">
-                            Home
-                        </Link>
+                    <div className="hidden sm:ml-6 sm:items-center sm:space-x-8 sm:flex">
+
                         <Link to="/shop" className="text-white hover:text-yellow-200 px-3 py-2 rounded-md text-base font-semibold transition-colors">
                             Shop
                         </Link>
@@ -67,15 +63,6 @@ const Navbar = () => {
                                 </div>
                             </Link>
                         </div>
-
-                        {/* Theme Toggle */}
-                        <button
-                            onClick={toggleTheme}
-                            className="text-white hover:text-yellow-200 p-2 rounded-full transition-colors"
-                            title="Toggle Theme"
-                        >
-                            {theme === 'dark' ? <Moon className="h-6 w-6" /> : <Sun className="h-6 w-6" />}
-                        </button>
 
                         {isAuthenticated ? (
                             <>
@@ -123,11 +110,9 @@ const Navbar = () => {
 
             {/* Mobile menu */}
             {isOpen && (
-                <div className="sm:hidden bg-red-800 dark:bg-red-950 border-t border-red-600 dark:border-red-800 transition-colors duration-300">
+                <div className="sm:hidden bg-red-800 border-t border-red-600 transition-colors duration-300">
                     <div className="pt-2 pb-3 space-y-1">
-                        <Link to="/" onClick={() => setIsOpen(false)} className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-red-100 hover:bg-red-700 hover:border-yellow-400 hover:text-white transition-all">
-                            Home
-                        </Link>
+
                         <Link to="/shop" onClick={() => setIsOpen(false)} className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-red-100 hover:bg-red-700 hover:border-yellow-400 hover:text-white transition-all">
                             Shop
                         </Link>
@@ -159,21 +144,6 @@ const Navbar = () => {
                                 </Link>
                             </>
                         )}
-                        {/* Mobile Theme Toggle */}
-                        <button
-                            onClick={() => { toggleTheme(); setIsOpen(false); }}
-                            className="w-full text-left block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-red-100 hover:bg-red-700 hover:text-white transition-all flex items-center"
-                        >
-                            {theme === 'dark' ? (
-                                <>
-                                    <Moon className="h-5 w-5 mr-2" /> Dark Mode
-                                </>
-                            ) : (
-                                <>
-                                    <Sun className="h-5 w-5 mr-2" /> Light Mode
-                                </>
-                            )}
-                        </button>
                     </div>
                 </div>
             )}

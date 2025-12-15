@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, ChevronLeft, Trash2, CheckCircle, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
+import api from '../api';
 
 const Cart = () => {
     const { cart, removeFromCart, totalPrice, clearCart } = useCart();
@@ -12,30 +13,57 @@ const Cart = () => {
 
     const handleCheckout = async () => {
         setIsCheckingOut(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+            const orderData = {
+                orderItems: cart.map(item => ({
+                    name: item.name,
+                    qty: item.quantity,
+                    image: item.imageUrl,
+                    price: item.price,
+                    product: item.id
+                })),
+                shippingAddress: {
+                    address: "123 Sweet St", // Hardcoded for simplified checkout flow
+                    city: "Sweet City",
+                    postalCode: "12345",
+                    country: "India"
+                },
+                paymentMethod: "Cash on Delivery", // Default method
+                itemsPrice: totalPrice,
+                taxPrice: 0,
+                shippingPrice: 0,
+                totalPrice: totalPrice
+            };
 
-        clearCart();
-        toast.success('Order placed successfully! Thank you for choosing Madhuram Sweets.', {
-            duration: 5000,
-            icon: '🎉',
-            style: {
-                borderRadius: '10px',
-                background: '#333',
-                color: '#fff',
-            },
-        });
+            await api.createOrder(orderData);
 
-        // Fire confetti
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#ef4444', '#eab308', '#ffffff'] // Red, Gold, White
-        });
+            clearCart();
+            toast.success('Order placed successfully! Thank you for choosing Madhuram Sweets.', {
+                duration: 5000,
+                icon: '🎉',
+                style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                },
+            });
 
-        setIsCheckingOut(false);
-        navigate('/');
+            // Fire confetti
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ef4444', '#eab308', '#ffffff'] // Red, Gold, White
+            });
+
+            navigate('/');
+        } catch (error) {
+            console.error("Checkout validation failed:", error);
+            const message = error.response?.data?.message || 'Checkout failed. Please try again.';
+            toast.error(message);
+        } finally {
+            setIsCheckingOut(false);
+        }
     };
 
     if (cart.length === 0) {
