@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const Order = require('../models/Order');
+// const Order = require('../models/Order');
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -20,20 +20,26 @@ const addOrderItems = asyncHandler(async (req, res) => {
         throw new Error('No order items');
         return;
     } else {
-        const order = new Order({
-            orderItems,
+        const orders = require('../data/orders');
+
+        const order = {
+            _id: String(orders.length + 1),
             user: req.user._id,
+            orderItems,
             shippingAddress,
             paymentMethod,
             itemsPrice,
             taxPrice,
             shippingPrice,
             totalPrice,
-        });
+            isPaid: false,
+            isDelivered: false,
+            createdAt: new Date().toISOString()
+        };
 
-        const createdOrder = await order.save();
+        orders.push(order);
 
-        res.status(201).json(createdOrder);
+        res.status(201).json(order);
     }
 });
 
@@ -41,8 +47,13 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/myorders
 // @access  Private
 const getMyOrders = asyncHandler(async (req, res) => {
-    const orders = await Order.find({ user: req.user._id });
-    res.json(orders);
+    const orders = require('../data/orders');
+    const userOrders = orders.filter(order =>
+        order.user === req.user._id ||
+        order.user === req.user.id ||
+        (typeof req.user === 'string' && order.user === req.user) // Handle potential mock user strings
+    );
+    res.json(userOrders);
 });
 
 module.exports = {

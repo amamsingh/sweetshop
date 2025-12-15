@@ -1,16 +1,13 @@
-const Sweet = require('../models/Sweet');
-const { validationResult } = require('express-validator');
+const sweetsData = require('../data/sweets');
+// In-memory data for the session
+let sweets = [...sweetsData];
 
 // @desc    Get all sweets
 // @route   GET /api/sweets
 // @access  Public
 const getSweets = async (req, res) => {
-    try {
-        const sweets = await Sweet.find({});
-        res.json(sweets);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    // Return all sweets
+    res.json(sweets);
 };
 
 // @desc    Search sweets
@@ -18,89 +15,46 @@ const getSweets = async (req, res) => {
 // @access  Public
 const searchSweets = async (req, res) => {
     const { name, category, minPrice, maxPrice } = req.query;
-    let query = {};
+    let results = [...sweets];
 
     if (name) {
-        query.name = { $regex: name, $options: 'i' };
+        results = results.filter(s => s.name.toLowerCase().includes(name.toLowerCase()));
     }
     if (category) {
-        query.category = { $regex: category, $options: 'i' };
+        results = results.filter(s => s.category && s.category.toLowerCase().includes(category.toLowerCase()));
     }
-    if (minPrice || maxPrice) {
-        query.price = {};
-        if (minPrice) query.price.$gte = Number(minPrice);
-        if (maxPrice) query.price.$lte = Number(maxPrice);
+    if (minPrice) {
+        results = results.filter(s => s.price >= Number(minPrice));
+    }
+    if (maxPrice) {
+        results = results.filter(s => s.price <= Number(maxPrice));
     }
 
-    try {
-        const sweets = await Sweet.find(query);
-        res.json(sweets);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    res.json(results);
 };
 
 // @desc    Create a sweet
 // @route   POST /api/sweets
 // @access  Private/Admin
 const createSweet = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { name, category, price, quantity, description, imageUrl, weight, ingredients, rating, tags } = req.body;
-
-    try {
-        const sweet = new Sweet({
-            name,
-            category: category || 'General',
-            price,
-            quantity,
-            description,
-            imageUrl,
-            weight,
-            ingredients,
-            rating,
-            tags,
-        });
-
-        const createSweet = await sweet.save();
-        res.status(201).json(createSweet);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    // Mock creation - does not persist
+    const newSweet = { ...req.body, _id: String(sweets.length + 1) };
+    sweets.push(newSweet);
+    res.status(201).json(newSweet);
 };
 
 // @desc    Update a sweet
 // @route   PUT /api/sweets/:id
 // @access  Private/Admin
 const updateSweet = async (req, res) => {
-    const { name, category, price, quantity, description, imageUrl, weight, ingredients, rating, tags } = req.body;
+    const { id } = req.params;
+    const index = sweets.findIndex(s => s._id === id || s.id === id);
 
-    try {
-        const sweet = await Sweet.findById(req.params.id);
-
-        if (sweet) {
-            sweet.name = name || sweet.name;
-            sweet.category = category || sweet.category;
-            sweet.price = price || sweet.price;
-            sweet.quantity = quantity !== undefined ? quantity : sweet.quantity;
-            sweet.description = description || sweet.description;
-            sweet.imageUrl = imageUrl || sweet.imageUrl;
-            sweet.weight = weight || sweet.weight;
-            sweet.ingredients = ingredients || sweet.ingredients;
-            sweet.rating = rating !== undefined ? rating : sweet.rating;
-            sweet.tags = tags || sweet.tags;
-
-            const updatedSweet = await sweet.save();
-            res.json(updatedSweet);
-        } else {
-            res.status(404);
-            throw new Error('Sweet not found');
-        }
-    } catch (error) {
-        res.status(404).json({ message: error.message });
+    if (index !== -1) {
+        sweets[index] = { ...sweets[index], ...req.body };
+        res.json(sweets[index]);
+    } else {
+        res.status(404).json({ message: 'Sweet not found' });
     }
 };
 
@@ -108,43 +62,29 @@ const updateSweet = async (req, res) => {
 // @route   DELETE /api/sweets/:id
 // @access  Private/Admin
 const deleteSweet = async (req, res) => {
-    try {
-        const sweet = await Sweet.findById(req.params.id);
-
-        if (sweet) {
-            await sweet.deleteOne();
-            res.json({ message: 'Sweet removed' });
-        } else {
-            res.status(404);
-            throw new Error('Sweet not found');
-        }
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+    const { id } = req.params;
+    sweets = sweets.filter(s => s._id !== id && s.id !== id);
+    res.json({ message: 'Sweet removed' });
 };
 
 // @desc    Purchase a sweet (reduce quantity)
 // @route   POST /api/sweets/:id/purchase
 // @access  Private
 const purchaseSweet = async (req, res) => {
-    try {
-        const sweet = await Sweet.findById(req.params.id);
+    const { id } = req.params;
+    const sweet = sweets.find(s => s._id === id || s.id === id);
 
-        if (sweet) {
-            if (sweet.quantity > 0) {
-                sweet.quantity = sweet.quantity - 1;
-                const updatedSweet = await sweet.save();
-                res.json(updatedSweet);
-            } else {
-                res.status(400);
-                throw new Error('Sweet is out of stock');
-            }
+    if (sweet) {
+        console.log(`Purchasing ${sweet.name}. Old Qty: ${sweet.quantity}`);
+        if (sweet.quantity > 0) {
+            sweet.quantity = sweet.quantity - 1;
+            console.log(`New Qty: ${sweet.quantity}`);
+            res.json(sweet);
         } else {
-            res.status(404);
-            throw new Error('Sweet not found');
+            res.status(400).json({ message: 'Sweet is out of stock' });
         }
-    } catch (error) {
-        res.status(400).json({ message: error.message });
+    } else {
+        res.status(404).json({ message: 'Sweet not found' });
     }
 };
 
@@ -153,20 +93,14 @@ const purchaseSweet = async (req, res) => {
 // @access  Private/Admin
 const restockSweet = async (req, res) => {
     const { quantity } = req.body;
+    const { id } = req.params;
+    const sweet = sweets.find(s => s._id === id || s.id === id);
 
-    try {
-        const sweet = await Sweet.findById(req.params.id);
-
-        if (sweet) {
-            sweet.quantity = sweet.quantity + Number(quantity);
-            const updatedSweet = await sweet.save();
-            res.json(updatedSweet);
-        } else {
-            res.status(404);
-            throw new Error('Sweet not found');
-        }
-    } catch (error) {
-        res.status(400).json({ message: error.message });
+    if (sweet) {
+        sweet.quantity = sweet.quantity + Number(quantity);
+        res.json(sweet);
+    } else {
+        res.status(404).json({ message: 'Sweet not found' });
     }
 };
 

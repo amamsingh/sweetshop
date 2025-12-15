@@ -10,7 +10,7 @@ const orderRoutes = require('./routes/orderRoutes');
 
 dotenv.config();
 
-connectDB();
+// connectDB(); // Disabled: Using local JSON data
 
 const app = express();
 
